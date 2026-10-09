@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.work:work-runtime:2.9.0")
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
