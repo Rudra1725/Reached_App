@@ -14,7 +14,7 @@
   Reached runs silently in the background, arms itself at your schedule, tracks your arrival via hardware geofencing, dispatches confirmation texts, and disarms itself to preserve 100% of your day's battery.
 </p>
 
-[📦 Download Latest Release APK](https://github.com/Rudra1725/Reached_App/releases/latest) • [🌐 Live Demo / Landing Page](https://reached-two.vercel.app) • [🐛 Report Bug](https://github.com/Rudra1725/Reached_App/issues)
+[📦 Download APK](https://github.com/Rudra1725/Reached_App/releases/latest) • [🌐 Live Demo / Landing Page](https://reached-two.vercel.app) • [Report Bug](https://github.com/Rudra1725/Reached_App/issues)
 
 </div>
 
