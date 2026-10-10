@@ -43,3 +43,34 @@ Commuters, students, and daily travelers often need to notify family or guardian
 ---
 
 ## 🏗️ Architecture & How It Works
+
+┌────────────────────────────────────────────────────────┐
+│                 Settings / MainActivity                │
+│     (Configure coordinates, contacts, message & time)   │
+└───────────────────────────┬────────────────────────────┘
+│
+▼
+┌────────────────────────────────────────────────────────┐
+│         AlarmManager.setAlarmClock (per Slot)          │
+│    (Highest priority alarm; wakes CPU through Doze)    │
+└───────────────────────────┬────────────────────────────┘
+│ [Fires at Scheduled Time]
+▼
+┌────────────────────────────────────────────────────────┐
+│                   AlarmArmReceiver                     │
+│  (Acquires WakeLock + registers circular 750m perimeter)│
+└───────────────────────────┬────────────────────────────┘
+│
+▼
+┌────────────────────────────────────────────────────────┐
+│               Google Play Services Geofence            │
+│            (Monitors entrance transition passively)    │
+└───────────────────────────┬────────────────────────────┘
+│ [GEOFENCE_TRANSITION_ENTER]
+▼
+┌────────────────────────────────────────────────────────┐
+│                   GeofenceReceiver                     │
+│  - Validates slot payload & applies debounce guard     │
+│  - Dispatches native SMS via SmsManager                │
+│  - Immediately disarms geofence & kills radios         │
+└────────────────────────────────────────────────────────┘
