@@ -35,8 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private int activeSlot = 1;
     private int visibleSlotsCount = 1;
-    private int scheduledHour = 8;
-    private int scheduledMinute = 30;
+    private int scheduledHour = 12;
+    private int scheduledMinute = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,6 @@ public class SettingsActivity extends AppCompatActivity {
         btnSlot2.setOnClickListener(v -> switchSlot(2));
         btnSlot3.setOnClickListener(v -> switchSlot(3));
 
-        // '+' Button to add new slot
         btnAddSlot.setOnClickListener(v -> {
             if (visibleSlotsCount == 1) {
                 visibleSlotsCount = 2;
@@ -93,10 +92,8 @@ public class SettingsActivity extends AppCompatActivity {
             refreshSlotsVisibility();
         });
 
-        // Delete / Reset Slot Button in upper-right corner
         btnDeleteSlot.setOnClickListener(v -> confirmDeleteSlot());
 
-        // '+' Button to add recipient number
         btnAddPhoneField.setOnClickListener(v -> {
             if (tilPhone2.getVisibility() == View.GONE) {
                 tilPhone2.setVisibility(View.VISIBLE);
@@ -106,7 +103,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        // Time Picker Dialog
         btnPickTime.setOnClickListener(v -> {
             TimePickerDialog dialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
                 scheduledHour = hourOfDay;
@@ -116,22 +112,20 @@ public class SettingsActivity extends AppCompatActivity {
             dialog.show();
         });
 
-        // Open Map
         btnPickOnMap.setOnClickListener(v -> {
             String currentLat = etTargetLat.getText().toString().trim();
             String currentLng = etTargetLng.getText().toString().trim();
-            if (currentLat.isEmpty()) currentLat = "18.5204";
-            if (currentLng.isEmpty()) currentLng = "73.9782";
+            String query = (!currentLat.isEmpty() && !currentLng.isEmpty()) ? currentLat + "," + currentLng : "0,0";
 
-            String uri = "geo:" + currentLat + "," + currentLng + "?q=" + currentLat + "," + currentLng + "(Destination)";
+            String uri = "geo:" + query + "?q=" + query + "(Destination)";
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             mapIntent.setPackage("com.google.android.apps.maps");
 
             try {
                 startActivity(mapIntent);
-                Toast.makeText(this, "Find location, copy Lat/Lng, and paste here", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Drop a pin, copy coordinates, and paste here", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Intent webMapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=" + currentLat + "," + currentLng));
+                Intent webMapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=" + query));
                 startActivity(webMapIntent);
             }
         });
@@ -143,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (activeSlot == 1) {
             new AlertDialog.Builder(this)
                     .setTitle("Reset Slot 1?")
-                    .setMessage("Slot 1 is your primary preset and cannot be deleted, but all its fields will be reset to default values.")
+                    .setMessage("Slot 1 is your primary preset and cannot be deleted, but all its fields will be cleared back to empty defaults.")
                     .setPositiveButton("Reset", (dialog, which) -> resetSlotData(1))
                     .setNegativeButton("Cancel", null)
                     .show();
@@ -154,13 +148,12 @@ public class SettingsActivity extends AppCompatActivity {
                 .setTitle("Delete Slot " + activeSlot + "?")
                 .setMessage("Are you sure you want to permanently remove this preset?")
                 .setPositiveButton("Delete", (dialog, which) -> {
+                    cancelSlotAlarm(this, activeSlot);
                     clearSlotData(activeSlot);
-
                     if (visibleSlotsCount > 1) {
                         visibleSlotsCount--;
                     }
                     prefs.edit().putInt("visible_slots_count", visibleSlotsCount).apply();
-
                     refreshSlotsVisibility();
                     switchSlot(1);
                     Toast.makeText(this, "Slot deleted successfully", Toast.LENGTH_SHORT).show();
@@ -181,10 +174,12 @@ public class SettingsActivity extends AppCompatActivity {
                 .remove(prefix + "phone2")
                 .remove(prefix + "phone3")
                 .remove(prefix + "msg")
+                .remove(prefix + "is_configured")
                 .apply();
     }
 
     private void resetSlotData(int slot) {
+        cancelSlotAlarm(this, slot);
         clearSlotData(slot);
         loadSlotData(slot);
         Toast.makeText(this, "Slot " + slot + " reset to defaults", Toast.LENGTH_SHORT).show();
@@ -215,14 +210,17 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void loadSlotData(int slot) {
         String prefix = "slot_" + slot + "_";
-        etSlotLabel.setText(prefs.getString(prefix + "label", slot == 1 ? "College" : (slot == 2 ? "Gym" : "Home")));
-        scheduledHour = prefs.getInt(prefix + "hour", 8);
-        scheduledMinute = prefs.getInt(prefix + "minute", 30);
+        etSlotLabel.setText(prefs.getString(prefix + "label", ""));
+        scheduledHour = prefs.getInt(prefix + "hour", 12);
+        scheduledMinute = prefs.getInt(prefix + "minute", 0);
         updateTimerLabel(scheduledHour, scheduledMinute);
 
-        etTargetLat.setText(String.valueOf(prefs.getFloat(prefix + "lat", 18.5204f)));
-        etTargetLng.setText(String.valueOf(prefs.getFloat(prefix + "lng", 73.9782f)));
-        etPhone1.setText(prefs.getString(prefix + "phone1", "+919322161563"));
+        float lat = prefs.getFloat(prefix + "lat", Float.NaN);
+        float lng = prefs.getFloat(prefix + "lng", Float.NaN);
+        etTargetLat.setText(Float.isNaN(lat) ? "" : String.valueOf(lat));
+        etTargetLng.setText(Float.isNaN(lng) ? "" : String.valueOf(lng));
+
+        etPhone1.setText(prefs.getString(prefix + "phone1", ""));
 
         String p2 = prefs.getString(prefix + "phone2", "");
         etPhone2.setText(p2);
@@ -233,7 +231,7 @@ public class SettingsActivity extends AppCompatActivity {
         tilPhone3.setVisibility(p3.isEmpty() ? View.GONE : View.VISIBLE);
 
         btnAddPhoneField.setVisibility((!p2.isEmpty() && !p3.isEmpty()) ? View.GONE : View.VISIBLE);
-        etTargetMessage.setText(prefs.getString(prefix + "msg", "P"));
+        etTargetMessage.setText(prefs.getString(prefix + "msg", ""));
     }
 
     private void updateTimerLabel(int hour, int minute) {
@@ -252,7 +250,7 @@ public class SettingsActivity extends AppCompatActivity {
         String msg = etTargetMessage.getText().toString().trim();
 
         if (p1.isEmpty() || msg.isEmpty() || latStr.isEmpty() || lngStr.isEmpty()) {
-            Toast.makeText(this, "Primary phone, message, and coordinates are required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter phone number, message, and coordinates", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -260,7 +258,7 @@ public class SettingsActivity extends AppCompatActivity {
             float lat = Float.parseFloat(latStr);
             float lng = Float.parseFloat(lngStr);
             String prefix = "slot_" + activeSlot + "_";
-            String finalLabel = label.isEmpty() ? "Slot " + activeSlot : label;
+            String finalLabel = label.isEmpty() ? "Preset " + activeSlot : label;
 
             prefs.edit()
                     .putInt("active_slot_id", activeSlot)
@@ -275,52 +273,77 @@ public class SettingsActivity extends AppCompatActivity {
                     .putString(prefix + "phone2", p2)
                     .putString(prefix + "phone3", p3)
                     .putString(prefix + "msg", msg)
-                    // Global keys utilized by receivers
-                    .putInt("timer_hour", scheduledHour)
-                    .putInt("timer_minute", scheduledMinute)
-                    .putFloat("target_lat", lat)
-                    .putFloat("target_lng", lng)
-                    .putString("target_phone_all", p1 + (p2.isEmpty() ? "" : "," + p2) + (p3.isEmpty() ? "" : "," + p3))
-                    .putString("target_message", msg)
+                    .putBoolean(prefix + "is_configured", true)
+                    .putLong("last_sms_sent_timestamp", 0)
                     .apply();
 
-            scheduleExactAlarm(this, scheduledHour, scheduledMinute);
-            Toast.makeText(this, "\"" + finalLabel + "\" Activated & Saved!", Toast.LENGTH_SHORT).show();
+            // Schedules this specific slot with its own unique request code
+            scheduleSlotAlarm(this, activeSlot, scheduledHour, scheduledMinute);
+
+            Toast.makeText(this, "\"" + finalLabel + "\" Activated & Saved", Toast.LENGTH_SHORT).show();
             finish();
 
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Coordinates must be numbers", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Coordinates must be valid numbers", Toast.LENGTH_SHORT).show();
         }
     }
 
     @SuppressLint("ScheduleExactAlarm")
-    public static void scheduleExactAlarm(Context context, int hour, int minute) {
+    public static void scheduleSlotAlarm(Context context, int slotId, int hour, int minute) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager == null) return;
+
         Intent intent = new Intent(context, AlarmArmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, 1005, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
-        );
+        intent.putExtra("slot_id", slotId);
+
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
+        // Unique request code per slot (Slot 1 -> 1001, Slot 2 -> 1002, Slot 3 -> 1003)
+        int requestCode = 1000 + slotId;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
 
         Calendar now = Calendar.getInstance();
         Calendar target = Calendar.getInstance();
         target.set(Calendar.HOUR_OF_DAY, hour);
         target.set(Calendar.MINUTE, minute);
         target.set(Calendar.SECOND, 0);
+        target.set(Calendar.MILLISECOND, 0);
 
-        if (now.after(target)) {
+        if (target.getTimeInMillis() <= now.getTimeInMillis()) {
             target.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        if (alarmManager != null) {
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, target.getTimeInMillis(), pendingIntent);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, target.getTimeInMillis(), pendingIntent);
-                }
-            } catch (SecurityException e) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, target.getTimeInMillis(), pendingIntent);
+        Intent showIntent = new Intent(context, MainActivity.class);
+        PendingIntent showPendingIntent = PendingIntent.getActivity(context, 2000 + slotId, showIntent, flags);
+
+        AlarmManager.AlarmClockInfo alarmClockInfo =
+                new AlarmManager.AlarmClockInfo(target.getTimeInMillis(), showPendingIntent);
+
+        try {
+            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+        } catch (SecurityException e) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, target.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, target.getTimeInMillis(), pendingIntent);
             }
         }
+    }
+
+    public static void cancelSlotAlarm(Context context, int slotId) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager == null) return;
+
+        Intent intent = new Intent(context, AlarmArmReceiver.class);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1000 + slotId, intent, flags);
+        alarmManager.cancel(pendingIntent);
     }
 }

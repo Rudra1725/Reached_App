@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/badge_pill"
+    android:backgroundTint="#121824"
+    android:orientation="vertical"
+    android:padding="22dp">
+
+    <!-- Dialog Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reached 📍 — Info &amp; Guide"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Developer Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/badge_pill"
+        android:backgroundTint="#0D131F"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEVELOPER"
+                android:textColor="#64748B"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="Rudra Wagh"
+                android:textColor="#2EE59D"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Social Action Buttons -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDialogGithub"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:backgroundTint="#16222F"
+            android:text="GitHub"
+            android:textAllCaps="false"
+            android:textColor="#2EE59D"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:strokeColor="#2EE59D"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDialogLinkedin"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#0A66C2"
+            android:text="LinkedIn"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="16dp"
+        android:background="#1E2A38" />
+
+    <!-- Guide Details -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:text="Battery-efficient transit automation.\n\n📖 How it works:\n1. Auto-Arm: Wakes up at your set scheduled time and monitors the 750m perimeter.\n2. Arrival Detection: When you enter your destination perimeter, Google Play Services detects the boundary.\n3. Multi-SMS: Dispatches arrival texts to all contacts saved in your active slot.\n4. Self-Disarm: Automatically turns off GPS to preserve battery for the rest of your day.\n\n⚙️ Tap 'Configure Settings' to add preset slots, add extra contacts, or change destinations."
+        android:textColor="#94A3B8"
+        android:textSize="13sp" />
+
+    <!-- Dismiss Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDialogDismiss"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#2EE59D"
+        android:text="Got It"
+        android:textColor="#0A0E17"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:cornerRadius="14dp" />
+</LinearLayout>

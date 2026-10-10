@@ -43,7 +43,6 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Upper Right Corner Trash Button -->
             <ImageButton
                 android:id="@+id/btnDeleteSlot"
                 android:layout_width="44dp"
@@ -118,12 +117,12 @@
                 app:strokeWidth="1dp" />
         </LinearLayout>
 
-        <!-- Clean Full-Width Slot Label -->
+        <!-- Preset Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Preset Name (e.g. College, Gym)"
+            android:hint="Preset Title (e.g. College, Office, Gym)"
             app:boxStrokeColor="#2EE59D"
             app:hintTextColor="#64748B"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -171,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="08:30 AM"
+                        android:text="12:00 PM"
                         android:textColor="#2EE59D"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -227,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:backgroundTint="#16222F"
-                        android:text="Open Map 🗺️"
+                        android:text="Open Map"
                         android:textAllCaps="false"
                         android:textColor="#3B82F6"
                         android:textSize="11sp"
@@ -247,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="6dp"
                         android:layout_weight="1"
-                        android:hint="Latitude"
+                        android:hint="Latitude (e.g. 18.5204)"
                         app:boxStrokeColor="#2EE59D"
                         app:hintTextColor="#64748B"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -265,7 +264,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:layout_weight="1"
-                        android:hint="Longitude"
+                        android:hint="Longitude (e.g. 73.8567)"
                         app:boxStrokeColor="#2EE59D"
                         app:hintTextColor="#64748B"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -331,7 +330,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Primary Contact (+91...)"
+                    android:hint="Primary Contact (e.g. +919876543210)"
                     app:boxStrokeColor="#2EE59D"
                     app:hintTextColor="#64748B"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -350,7 +349,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:visibility="gone"
-                    android:hint="Second Contact (Optional)"
+                    android:hint="Second Contact (e.g. +919876543211)"
                     app:boxStrokeColor="#2EE59D"
                     app:hintTextColor="#64748B"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -369,7 +368,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:visibility="gone"
-                    android:hint="Third Contact (Optional)"
+                    android:hint="Third Contact (e.g. +919876543212)"
                     app:boxStrokeColor="#2EE59D"
                     app:hintTextColor="#64748B"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -386,7 +385,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Arrival Text Body (e.g. P)"
+                    android:hint="Arrival Text Body (e.g. Reached safely)"
                     app:boxStrokeColor="#2EE59D"
                     app:hintTextColor="#64748B"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">

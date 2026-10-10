@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.pohachalo">
 
-    <!-- Location Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
-    <!-- SMS & Notification Permissions -->
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <!-- Alarm & WakeLock Permissions -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Reached"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Pohachalo">
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <!-- Main Screen -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,22 +29,17 @@
             </intent-filter>
         </activity>
 
-        <!-- Settings Screen -->
         <activity
             android:name=".SettingsActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:exported="false" />
 
-        <!-- Geofence Arrival Receiver -->
-        <receiver
-            android:name=".GeofenceReceiver"
-            android:exported="true" />
-
-        <!-- Daily Alarm Arm Receiver -->
         <receiver
             android:name=".AlarmArmReceiver"
-            android:exported="true" />
+            android:exported="false" />
+
+        <receiver
+            android:name=".GeofenceReceiver"
+            android:exported="false" />
 
     </application>
-
 </manifest>

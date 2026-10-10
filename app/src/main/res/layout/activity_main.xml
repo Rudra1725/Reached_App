@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="24dp"
         android:paddingTop="20dp"
-        android:paddingBottom="28dp">
+        android:paddingBottom="32dp">
 
         <!-- Header -->
         <LinearLayout
@@ -31,16 +31,30 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <!-- GPS LIVE Badge with Small Red Dot -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/badge_pill"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="7dp"
-                android:text="● GPS LIVE"
-                android:textColor="#2EE59D"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/red_dot" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GPS LIVE"
+                    android:textColor="#2EE59D"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btnAppGuide"
@@ -53,12 +67,12 @@
                 app:tint="#2EE59D" />
         </LinearLayout>
 
-        <!-- Status Card -->
+        <!-- Floating Status Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardStatusFloating"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:layout_marginTop="28dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="24dp"
             app:cardBackgroundColor="#121824"
             app:cardCornerRadius="26dp"
             app:cardElevation="6dp"
@@ -106,7 +120,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Primary Action Button -->
+        <!-- Single Primary ARM/DISARM Button (Restored) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnToggle"
             android:layout_width="match_parent"
@@ -119,11 +133,11 @@
             android:textStyle="bold"
             app:cornerRadius="28dp" />
 
-        <!-- Upgraded Active Slot & Schedule Banner -->
+        <!-- Configured Presets Overview Box -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             app:cardBackgroundColor="#121824"
             app:cardCornerRadius="20dp"
             app:strokeColor="#1E2A38"
@@ -132,53 +146,173 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="⏱️"
-                    android:textSize="22sp" />
+                    android:text="CONFIGURED PRESETS"
+                    android:textColor="#64748B"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
 
+                <!-- Slot 1 Status Item -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/itemSlot1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvSlot1Name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Preset 1"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSlot1Time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12:00 PM DAILY"
+                            android:textColor="#2EE59D"
+                            android:textSize="11sp" />
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/tvActiveSlotTitle"
+                        android:id="@+id/tvSlot1Badge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="College"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvTimerSummary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="04:30 PM DAILY"
+                        android:background="@drawable/badge_pill"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="ACTIVE"
                         android:textColor="#2EE59D"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Divider 1 -->
+                <View
+                    android:id="@+id/divSlot2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#1E2A38"
+                    android:visibility="gone" />
+
+                <!-- Slot 2 Status Item -->
+                <LinearLayout
+                    android:id="@+id/itemSlot2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/badge_pill"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="4dp"
-                    android:text="ACTIVE"
-                    android:textColor="#2EE59D"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvSlot2Name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Preset 2"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSlot2Time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12:00 PM DAILY"
+                            android:textColor="#2EE59D"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvSlot2Badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/badge_pill"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="ACTIVE"
+                        android:textColor="#2EE59D"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Divider 2 -->
+                <View
+                    android:id="@+id/divSlot3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="#1E2A38"
+                    android:visibility="gone" />
+
+                <!-- Slot 3 Status Item -->
+                <LinearLayout
+                    android:id="@+id/itemSlot3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvSlot3Name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Preset 3"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSlot3Time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12:00 PM DAILY"
+                            android:textColor="#2EE59D"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvSlot3Badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/badge_pill"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="ACTIVE"
+                        android:textColor="#2EE59D"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -187,9 +321,9 @@
             android:id="@+id/btnOpenSettings"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:backgroundTint="#121824"
-            android:text="Configure Settings &amp; Timer ⚙️"
+            android:text="Configure Settings &amp; Presets"
             android:textAllCaps="false"
             android:textColor="#94A3B8"
             app:cornerRadius="27dp"
